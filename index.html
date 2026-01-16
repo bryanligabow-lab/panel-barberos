@@ -4,308 +4,55 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Panel Barberos - Peluquería de Bryan</title>
-
   <style>
     :root{
-      --bg:#07090d;
-      --card:rgba(17,24,39,.82);
-      --line:rgba(255,255,255,.12);
-      --text:#F9FAFB;
-      --muted:rgba(249,250,251,.70);
-
-      --gold:#d4af37;
-      --gold2:#b88a10;
-
-      --ok:#22c55e;
-      --err:#ef4444;
-
-      --shadow:0 18px 60px rgba(0,0,0,.40);
-      --radius:18px;
+      --bg:#07090d; --card:rgba(17,24,39,.82); --line:rgba(255,255,255,.12);
+      --text:#F9FAFB; --muted:rgba(249,250,251,.70);
+      --gold:#d4af37; --gold2:#b88a10; --ok:#22c55e; --err:#ef4444;
+      --shadow:0 18px 60px rgba(0,0,0,.40); --radius:18px;
     }
     *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto}
-    body{
-      margin:0; min-height:100vh;
-      background:var(--bg);
-      color:var(--text);
-      display:flex; justify-content:center;
-      padding:18px;
-      overflow-x:hidden;
-    }
-
-    /* Fondo premium + partículas */
-    .bgFX{
-      position:fixed; inset:-80px;
-      pointer-events:none;
-      background:
-        radial-gradient(1000px 700px at 18% 10%, rgba(212,175,55,.22), transparent 60%),
-        radial-gradient(1000px 700px at 85% 18%, rgba(59,130,246,.12), transparent 60%),
-        radial-gradient(900px 620px at 45% 95%, rgba(34,197,94,.10), transparent 60%);
-      opacity:.96;
-      animation: floatGlow 10s ease-in-out infinite alternate;
-    }
-    @keyframes floatGlow{
-      0%{ transform: translate3d(0,0,0) scale(1); filter: blur(0px); }
-      100%{ transform: translate3d(0,-16px,0) scale(1.03); filter: blur(1px); }
-    }
-    .sparkles{
-      position:fixed; inset:0;
-      pointer-events:none;
-      opacity:.55;
-      background-image:
-        radial-gradient(2px 2px at 20% 30%, rgba(212,175,55,.65), transparent 60%),
-        radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,.35), transparent 60%),
-        radial-gradient(2px 2px at 55% 80%, rgba(59,130,246,.35), transparent 60%),
-        radial-gradient(1.5px 1.5px at 35% 65%, rgba(34,197,94,.35), transparent 60%),
-        radial-gradient(1.5px 1.5px at 82% 72%, rgba(212,175,55,.35), transparent 60%);
-      animation: twinkle 5.5s ease-in-out infinite alternate;
-    }
-    @keyframes twinkle{
-      from{ transform: translateY(0px); filter: blur(.2px); }
-      to{ transform: translateY(-10px); filter: blur(.6px); }
-    }
-
-    .wrap{max-width:1080px;width:100%; position:relative; z-index:2}
-
-    .card{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      padding:18px;
-      box-shadow:var(--shadow);
-      backdrop-filter: blur(12px);
-      margin-bottom:14px;
-    }
-
-    .top{
-      display:flex; gap:12px; align-items:center; justify-content:space-between;
-      flex-wrap:wrap;
-    }
-    .title{
-      display:flex; gap:10px; align-items:center;
-    }
-    .logo{
-      width:46px;height:46px;border-radius:14px;
-      border:1px solid rgba(212,175,55,.40);
-      background:rgba(255,255,255,.06);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:1000;
-      position:relative;
-      overflow:hidden;
-    }
-    .logo::after{
-      content:"";
-      position:absolute; inset:-40px;
-      background:linear-gradient(115deg, transparent 45%, rgba(212,175,55,.22) 50%, transparent 55%);
-      transform: rotate(12deg) translateX(-60%);
-      animation: shine 2.8s ease-in-out infinite;
-    }
-    @keyframes shine{
-      0%{ transform: rotate(12deg) translateX(-70%); opacity:.0; }
-      40%{ opacity:.55; }
-      100%{ transform: rotate(12deg) translateX(70%); opacity:0; }
-    }
-
-    .badge{
-      font-size:12px;
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(212,175,55,.28);
-      background:rgba(212,175,55,.10);
-      color:rgba(249,250,251,.92);
-      user-select:none;
-      white-space:nowrap;
-    }
-
-    .btn{
-      border:1px solid var(--line);
-      border-radius:14px;
-      padding:10px 12px;
-      font-weight:900;
-      cursor:pointer;
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      justify-content:center;
-      text-decoration:none;
-      transition: transform .08s ease, filter .2s ease, opacity .2s ease;
-    }
-    .btn:hover{ filter:brightness(1.08); }
-    .btn:active{ transform: translateY(1px); }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; }
-
-    .primary{
-      background:linear-gradient(135deg,var(--gold),var(--gold2));
-      color:#1a1406;
-      border-color:rgba(212,175,55,.45);
-      box-shadow:0 12px 30px rgba(212,175,55,.12);
-    }
-    .danger{
-      background:rgba(239,68,68,.14);
-      border-color:rgba(239,68,68,.35);
-    }
-    .ok{
-      background:rgba(34,197,94,.14);
-      border-color:rgba(34,197,94,.35);
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 360px 1fr;
-      gap:14px;
-      align-items:start;
-    }
-    @media(max-width:980px){ .grid{grid-template-columns:1fr} }
-
-    label{font-size:13px; display:block; margin-top:12px;}
-    input,select,textarea{
-      width:100%;
-      margin-top:6px;
-      padding:10px 11px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.25);
-      color:white;
-      outline:none;
-    }
-
-    .hint{font-size:12px;color:rgba(249,250,251,.65); margin-top:8px}
-    .muted{color:var(--muted)}
+    body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);display:flex;justify-content:center;padding:18px}
+    .wrap{max-width:1080px;width:100%}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+    .top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+    .title{display:flex;gap:10px;align-items:center}
+    .badge{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid rgba(212,175,55,.28);background:rgba(212,175,55,.10)}
+    .btn{border:1px solid var(--line);border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer;background:rgba(255,255,255,.04);color:var(--text)}
+    .primary{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a1406;border-color:rgba(212,175,55,.45)}
+    .danger{background:rgba(239,68,68,.14);border-color:rgba(239,68,68,.35)}
+    .grid{display:grid;grid-template-columns:360px 1fr;gap:14px;align-items:start}
+    @media(max-width:980px){.grid{grid-template-columns:1fr}}
+    label{font-size:13px;display:block;margin-top:12px}
+    input,select{width:100%;margin-top:6px;padding:10px 11px;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);color:white;outline:none}
+    .hint{font-size:12px;color:rgba(249,250,251,.65);margin-top:8px}
     .divider{height:1px;background:rgba(255,255,255,.10);margin:12px 0}
-
-    .list{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:12px;
-    }
-
-    .req{
-      border:1px solid rgba(255,255,255,.12);
-      background:rgba(255,255,255,.03);
-      border-radius:16px;
-      padding:14px;
-      animation: pop .25s ease;
-    }
-    @keyframes pop{
-      from{ transform: translateY(6px); opacity:.0; }
-      to{ transform: translateY(0); opacity:1; }
-    }
-
-    .reqTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .reqTitle{font-weight:1000;font-size:15px}
-
-    .chips{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-    .chip{
-      font-size:12px; padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);
-      color:rgba(249,250,251,.92);
-    }
-    .chip.pending{ border-color:rgba(212,175,55,.45); background:rgba(212,175,55,.10); }
-    .chip.accepted{ border-color:rgba(34,197,94,.45); background:rgba(34,197,94,.12); }
-    .chip.rejected{ border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.12); }
-
-    .reqBody{
-      margin-top:10px;
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:12px;
-    }
-    @media(max-width:880px){ .reqBody{grid-template-columns:1fr} }
-
-    .kv{font-size:13px; line-height:1.5}
-    .kv b{color:rgba(249,250,251,.92)}
-    .actions{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; align-items:center;
-    }
-
-    .photos{
-      margin-top:10px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .photoLink{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      font-weight:900;
-      font-size:12px;
-      padding:8px 10px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);
-      color:rgba(249,250,251,.92);
-      text-decoration:none;
-    }
-
-    .statusBox{
-      display:none;
-      margin-top:10px;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);
-      font-weight:900;
-    }
-    .statusOk{ border-color:rgba(34,197,94,.45); background:rgba(34,197,94,.12); }
-    .statusErr{ border-color:rgba(239,68,68,.45); background:rgba(239,68,68,.12); }
-
-    .loaderDot{
-      display:inline-block;
-      width:6px;height:6px;border-radius:50%;
-      background:rgba(249,250,251,.78);
-      margin-left:6px;
-      animation: dot 1s ease-in-out infinite;
-    }
-    .loaderDot:nth-child(2){ animation-delay:.15s; opacity:.8; }
-    .loaderDot:nth-child(3){ animation-delay:.3s; opacity:.6; }
-    @keyframes dot{
-      0%,100%{ transform: translateY(0px); }
-      50%{ transform: translateY(-4px); }
-    }
+    .statusBox{display:none;margin-top:10px;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(0,0,0,.18);font-weight:900}
+    .statusOk{border-color:rgba(34,197,94,.45);background:rgba(34,197,94,.12)}
+    .statusErr{border-color:rgba(239,68,68,.45);background:rgba(239,68,68,.12)}
   </style>
 </head>
-
 <body>
-  <div class="bgFX"></div>
-  <div class="sparkles"></div>
-
   <div class="wrap">
-    <!-- HEADER -->
     <div class="card">
       <div class="top">
         <div class="title">
-          <div class="logo">💈</div>
+          <div style="width:44px;height:44px;border-radius:14px;border:1px solid rgba(212,175,55,.40);display:flex;align-items:center;justify-content:center;font-weight:1000;">💈</div>
           <div>
             <div style="font-size:18px;font-weight:1000;">Panel de Barberos</div>
-            <div class="muted" style="font-size:13px;">Ver y gestionar citas pendientes (Aceptar / Rechazar)</div>
+            <div style="opacity:.75;font-size:13px;">Cargar barberos desde Sheets (BARBEROS)</div>
           </div>
-          <span id="envBadge" class="badge">Conectando<span class="loaderDot"></span><span class="loaderDot"></span><span class="loaderDot"></span></span>
+          <span id="envBadge" class="badge">Conectando…</span>
         </div>
-
-        <div class="actions">
-          <button id="btnRefresh" class="btn">🔄 Actualizar</button>
-          <button id="btnLogout" class="btn danger" style="display:none;">🚪 Salir</button>
-        </div>
+        <button id="btnRefresh" class="btn">🔄 Actualizar</button>
       </div>
-
       <div id="statusGlobal" class="statusBox"></div>
     </div>
 
     <div class="grid">
-      <!-- LOGIN -->
-      <div class="card" id="loginCard">
+      <div class="card">
         <div style="font-weight:1000;font-size:15px;">🔐 Iniciar sesión</div>
-        <div class="hint">Cada barbero entra con su <b>nombre</b> y su <b>PIN</b>.</div>
+        <div class="hint">Por ahora solo cargamos la lista de barberos (JSONP). Luego activamos login/panel.</div>
 
         <div class="divider"></div>
 
@@ -315,34 +62,16 @@
         </select>
 
         <label>PIN / Contraseña</label>
-        <input id="pinInput" type="password" placeholder="••••••" autocomplete="current-password">
+        <input id="pinInput" type="password" placeholder="••••••">
 
-        <button id="btnLogin" class="btn primary" style="margin-top:14px; width:100%;">✅ Entrar</button>
+        <button class="btn primary" style="margin-top:14px;width:100%;" disabled>✅ Entrar (próximo paso)</button>
 
-        <div class="hint">
-          Si no aparece un barbero aquí, revisa tu hoja <b>BARBEROS</b> (ACTIVO=SI).
-        </div>
+        <div class="hint">Si no aparece, revisa tu hoja <b>BARBEROS</b> (ACTIVO=SI).</div>
       </div>
 
-      <!-- DASHBOARD -->
-      <div class="card" id="dashCard" style="display:none;">
-        <div class="top">
-          <div>
-            <div style="font-size:15px;font-weight:1000;">📋 Solicitudes pendientes</div>
-            <div class="muted" style="font-size:13px;">Solo verás las citas asignadas a tu nombre.</div>
-          </div>
-          <div class="chips">
-            <span class="chip pending">Pendientes: <b id="pendingCount">0</b></span>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-
-        <div id="reqList" class="list"></div>
-
-        <div id="emptyState" class="muted" style="display:none; padding:14px 0;">
-          No tienes solicitudes pendientes por ahora.
-        </div>
+      <div class="card">
+        <div style="font-weight:1000;font-size:15px;">📋 Estado</div>
+        <div class="hint">Cuando veas barberos, ya está bien conectada la WebApp con GitHub.</div>
       </div>
     </div>
   </div>
@@ -350,84 +79,27 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ✅ NO CAMBIAR: tu Web App Apps Script (el /exec)
+  // ✅ TU WEB APP /exec
   const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxWpXdGqiPiAuNb7c3-IKjisDpXn_6phyEstoYb2wGWq8GyA32a0fqbuKBCmQsuohWC/exec";
 
-  // ---------------------------
-  // UI helpers
-  // ---------------------------
   const $ = (id)=>document.getElementById(id);
-
   const envBadge = $("envBadge");
   const statusGlobal = $("statusGlobal");
-
-  const loginCard = $("loginCard");
-  const dashCard = $("dashCard");
-
   const barberoSelect = $("barberoSelect");
-  const pinInput = $("pinInput");
-  const btnLogin = $("btnLogin");
-
   const btnRefresh = $("btnRefresh");
-  const btnLogout = $("btnLogout");
-
-  const reqList = $("reqList");
-  const emptyState = $("emptyState");
-  const pendingCount = $("pendingCount");
-
-  function setEnv(text, ok=true){
-    envBadge.textContent = text;
-    envBadge.style.borderColor = ok ? "rgba(34,197,94,.35)" : "rgba(239,68,68,.35)";
-    envBadge.style.background = ok ? "rgba(34,197,94,.12)" : "rgba(239,68,68,.12)";
-  }
 
   function showStatus(msg, ok=true){
     statusGlobal.style.display = "block";
     statusGlobal.className = "statusBox " + (ok ? "statusOk" : "statusErr");
     statusGlobal.textContent = msg;
-    setTimeout(()=>{ statusGlobal.style.display="none"; }, 4200);
+    setTimeout(()=>{ statusGlobal.style.display="none"; }, 4500);
   }
 
-  function setLoggedUI(on){
-    loginCard.style.display = on ? "none" : "block";
-    dashCard.style.display = on ? "block" : "none";
-    btnLogout.style.display = on ? "inline-flex" : "none";
-  }
-
-  // ---------------------------
-  // Session storage
-  // ---------------------------
-  const SESSION_KEY = "barber_session_v1";
-
-  function getSession(){
-    try { return JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); }
-    catch { return null; }
-  }
-  function setSession(s){
-    localStorage.setItem(SESSION_KEY, JSON.stringify(s));
-  }
-  function clearSession(){
-    localStorage.removeItem(SESSION_KEY);
-  }
-
-  // ---------------------------
-  // Escape helper
-  // ---------------------------
-  function esc(s){
-    return String(s ?? "").replace(/[&<>"']/g, m => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
-  }
-
-  // ---------------------------
-  // JSONP API (SIN CORS)
-  // Requiere que Apps Script acepte GET con ?callback=xxx
-  // ---------------------------
+  // JSONP helper
   function jsonp(params){
     return new Promise((resolve, reject) => {
       const cb = "cb_" + Math.random().toString(36).slice(2);
       const url = new URL(WEB_APP_URL);
-
       Object.entries(params || {}).forEach(([k,v]) => url.searchParams.set(k, String(v)));
       url.searchParams.set("callback", cb);
 
@@ -442,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       function cleanup(){
         clearTimeout(timeout);
-        try { delete window[cb]; } catch {}
+        try { delete window[cb]; } catch(e){}
         if (s && s.parentNode) s.parentNode.removeChild(s);
       }
 
@@ -453,13 +125,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ---------------------------
-  // Cargar barberos
-  // action: listBarbers
-  // ---------------------------
   async function loadBarbers(){
     try{
-      setEnv("Conectando…", true);
+      envBadge.textContent = "Conectando…";
       barberoSelect.innerHTML = `<option value="">Cargando barberos…</option>`;
       barberoSelect.disabled = true;
 
@@ -469,240 +137,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const barbers = (res.barbers || []).filter(Boolean);
 
-      if (!barbers.length){
+      if (!barbers.length) {
         barberoSelect.innerHTML = `<option value="">No hay barberos activos</option>`;
+        showStatus("Conectó, pero no hay barberos ACTIVO=SI.", false);
       } else {
         barberoSelect.innerHTML =
           `<option value="">Selecciona…</option>` +
-          barbers.map(b => `<option value="${esc(b)}">${esc(b)}</option>`).join("");
+          barbers.map(b => `<option value="${String(b).replace(/"/g,'&quot;')}">${b}</option>`).join("");
+        showStatus("Barberos cargados ✅", true);
       }
 
       barberoSelect.disabled = false;
-      setEnv("Conectado ✅", true);
+      envBadge.textContent = "Conectado ✅";
+
     }catch(e){
       console.error(e);
-      setEnv("Sin conexión ❌", false);
+      envBadge.textContent = "Sin conexión ❌";
       barberoSelect.innerHTML = `<option value="">Error al cargar</option>`;
       barberoSelect.disabled = false;
-      showStatus("No se pudo cargar BARBEROS. (Revisar Apps Script / doGet JSONP)", false);
+      showStatus("No se pudo cargar barberos. Revisa Deploy y doGet único.", false);
     }
   }
 
-  // ---------------------------
-  // LOGIN
-  // action: barberLogin
-  // ---------------------------
-  async function login(){
-    const barber = (barberoSelect.value || "").trim();
-    const pin = (pinInput.value || "").trim();
-
-    if (!barber || !pin){
-      showStatus("Selecciona barbero y escribe tu PIN.", false);
-      return;
-    }
-
-    btnLogin.disabled = true;
-    btnLogin.textContent = "⏳ Verificando…";
-
-    try{
-      const res = await jsonp({ action:"barberLogin", barber, pin });
-
-      if (!res || !res.ok) throw new Error(res?.error || "No se pudo iniciar sesión");
-
-      setSession({ barber, token: res.token, ts: Date.now() });
-      setLoggedUI(true);
-      showStatus("Sesión iniciada ✅", true);
-      await loadRequests();
-
-    }catch(e){
-      console.error(e);
-      showStatus(e.message || "Error de login", false);
-    }finally{
-      btnLogin.disabled = false;
-      btnLogin.textContent = "✅ Entrar";
-    }
-  }
-
-  // ---------------------------
-  // Listar pendientes
-  // action: barberListRequests
-  // ---------------------------
-  async function loadRequests(){
-    const sess = getSession();
-    if (!sess?.token || !sess?.barber){
-      setLoggedUI(false);
-      return;
-    }
-
-    reqList.innerHTML = "";
-    emptyState.style.display = "none";
-    pendingCount.textContent = "0";
-
-    btnRefresh.disabled = true;
-    btnRefresh.textContent = "⏳ Actualizando…";
-
-    try{
-      const res = await jsonp({
-        action: "barberListRequests",
-        token: sess.token,
-        barber: sess.barber
-      });
-
-      if (!res || !res.ok) throw new Error(res?.error || "No se pudieron cargar solicitudes");
-
-      const items = Array.isArray(res.items) ? res.items : [];
-      pendingCount.textContent = String(items.length);
-
-      if (!items.length){
-        emptyState.style.display = "block";
-        return;
-      }
-
-      items.forEach(renderRequest);
-
-    }catch(e){
-      console.error(e);
-      showStatus(e.message || "Error cargando solicitudes", false);
-      // si token inválido, vuelve a login
-      if ((e.message || "").toLowerCase().includes("token")){
-        clearSession();
-        setLoggedUI(false);
-      }
-    }finally{
-      btnRefresh.disabled = false;
-      btnRefresh.textContent = "🔄 Actualizar";
-    }
-  }
-
-  function statusChip(status){
-    const st = String(status || "PENDIENTE").toUpperCase();
-    if (st.includes("ACEPT")) return `<span class="chip accepted">ACEPTADA</span>`;
-    if (st.includes("RECH")) return `<span class="chip rejected">RECHAZADA</span>`;
-    return `<span class="chip pending">PENDIENTE</span>`;
-  }
-
-  function renderRequest(item){
-    const div = document.createElement("div");
-    div.className = "req";
-
-    const fotos = Array.isArray(item.fotos) ? item.fotos : [];
-    const fotosHtml = fotos.length
-      ? `<div class="photos">${fotos.map((f,i)=>`
-            <a class="photoLink" href="${esc(f.url)}" target="_blank" rel="noopener">🖼️ Foto ${i+1}</a>
-         `).join("")}</div>`
-      : `<div class="hint">Sin fotos adjuntas.</div>`;
-
-    div.innerHTML = `
-      <div class="reqTop">
-        <div>
-          <div class="reqTitle">👤 ${esc(item.nombre)} <span class="muted" style="font-weight:800;">(${esc(item.id)})</span></div>
-          <div class="muted" style="font-size:13px;margin-top:4px;">
-            📅 ${esc(item.fecha)} • 🕒 ${esc(item.hora)} • 💈 ${esc(item.barbero)}
-          </div>
-        </div>
-        <div class="chips">
-          ${statusChip(item.status)}
-          <span class="chip">💵 ${esc(item.pago || "-")} • $${esc(item.presupuesto || "-")}</span>
-        </div>
-      </div>
-
-      <div class="reqBody">
-        <div class="kv">
-          <div><b>Celular:</b> ${esc(item.celular)}</div>
-          <div><b>Email:</b> ${esc(item.email)}</div>
-          <div style="margin-top:8px;"><b>Descripción:</b><br>${esc(item.descripcion)}</div>
-          <div style="margin-top:10px;">${fotosHtml}</div>
-        </div>
-
-        <div>
-          <div class="actions">
-            <button class="btn ok" data-act="ACEPTAR">✅ Aceptar</button>
-            <button class="btn danger" data-act="RECHAZAR">⛔ Rechazar</button>
-          </div>
-          <div class="hint" style="margin-top:10px; text-align:right;">
-            Al aceptar/rechazar se actualiza en Sheets y se dispara tu flujo.
-          </div>
-        </div>
-      </div>
-    `;
-
-    div.querySelectorAll("button[data-act]").forEach(btn => {
-      btn.addEventListener("click", async () => {
-        const act = btn.getAttribute("data-act");
-        await updateRequest(item.id, act);
-      });
-    });
-
-    reqList.appendChild(div);
-  }
-
-  // ---------------------------
-  // Aceptar/Rechazar
-  // action: barberUpdateRequest
-  // ---------------------------
-  async function updateRequest(id, decision){
-    const sess = getSession();
-    if (!sess?.token){
-      showStatus("Sesión no válida. Inicia sesión otra vez.", false);
-      setLoggedUI(false);
-      return;
-    }
-
-    if (!confirm(`¿Seguro que deseas ${decision} esta solicitud?`)) return;
-
-    try{
-      const res = await jsonp({
-        action: "barberUpdateRequest",
-        token: sess.token,
-        id,
-        decision // "ACEPTAR" | "RECHAZAR"
-      });
-
-      if (!res || !res.ok) throw new Error(res?.error || "No se pudo actualizar");
-
-      showStatus(`Solicitud ${decision} ✅`, true);
-      await loadRequests();
-
-    }catch(e){
-      console.error(e);
-      showStatus(e.message || "Error actualizando", false);
-    }
-  }
-
-  // ---------------------------
-  // Logout
-  // ---------------------------
-  function logout(){
-    clearSession();
-    setLoggedUI(false);
-    pinInput.value = "";
-    showStatus("Sesión cerrada.");
-  }
-
-  // Eventos
-  btnLogin.addEventListener("click", login);
-  btnRefresh.addEventListener("click", loadRequests);
-  btnLogout.addEventListener("click", logout);
-
-  pinInput.addEventListener("keydown", (e)=>{
-    if (e.key === "Enter") login();
-  });
-
-  // Boot
-  (async () => {
-    await loadBarbers();
-
-    const sess = getSession();
-    if (sess?.token && sess?.barber){
-      setLoggedUI(true);
-      await loadRequests();
-    } else {
-      setLoggedUI(false);
-    }
-  })();
-
+  btnRefresh.addEventListener("click", loadBarbers);
+  loadBarbers();
 });
 </script>
-
 </body>
 </html>
